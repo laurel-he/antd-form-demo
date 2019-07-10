@@ -3,7 +3,7 @@ import {
     Input,
     Tooltip,
     Icon,
-    Cascader,
+    Collapse,
     Select,
     Row,
     Col,
@@ -16,6 +16,8 @@ import {
   import { FormComponentProps } from 'antd/lib/form';
   import { WrappedFormUtils } from 'antd/es/form/Form';
 import './index.css';
+import data from './data';
+import { objectProperty } from '@babel/types';
   interface UserFormProps extends FormComponentProps {
     age: number;
     name: string;
@@ -51,8 +53,61 @@ handleCancel = (e: any) => {
       visible: false,
     });
   };
+getAllKey (obj: any): any[] {
+
+  const arr: any[] = []
+
+  // console.log(Object.keys(obj));
+    if (Object.keys(obj)) {
+      let keys = Object.keys(obj);
+      return keys.map((items) => {
+        // console.log('params', items);
+        // console.log('params value is ', obj[items]);
+        if (obj[items] instanceof Object) {
+          return this.getAllKey(obj[items]);
+        } else {
+          console.log('1 items', items);
+          console.log('the off values is', obj[items]);
+          return (
+            <Form.Item
+                label={
+                    <span>
+                    {items}
+                    </span>
+                    }
+                >
+                <Input value={obj[items]}/>
+            </Form.Item>
+          );
+        }
+        // console.log('isExtensible', Object.isExtensible(obj[items]));
+        // this.getAllKey(obj);
+      });
+    }
+console.log('arr', arr)
+    return arr
+}
       render() {
+        const { Panel } = Collapse;
         const { getFieldDecorator } = this.props.form;
+        console.log('res data is:', data);
+        console.log('res data keys is:', Object.keys(data));
+        const keys = Object.keys(data);
+        const text = `
+            A dog is a type of domesticated animal.
+            Known for its loyalty and faithfulness,
+            it can be found as a welcome guest in many households across the world.
+            `;
+            const formItemLayout = {
+              labelCol: {
+                xs: { span: 24 },
+                sm: { span: 8 },
+              },
+              wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 16 },
+              },
+            };
           return (
             <div>
                 <Button type="primary" onClick={this.showModal}>
@@ -64,41 +119,57 @@ handleCancel = (e: any) => {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 >
-                <Form onSubmit={this.handleSubmit} className="login-form">
-                <Form.Item>
-                  {getFieldDecorator('username', {
-                    rules: [{ required: true, message: 'Please input your username!' }],
-                  })(
-                    <Input
-                      prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                      placeholder="Username"
-                    />,
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  {getFieldDecorator('password', {
-                    rules: [{ required: true, message: 'Please input your Password!' }],
-                  })(
-                    <Input
-                      prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                      type="password"
-                      placeholder="Password"
-                    />,
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  {getFieldDecorator('remember', {
-                    valuePropName: 'checked',
-                    initialValue: true,
-                  })(<Checkbox>Remember me</Checkbox>)}
-                  <a className="login-form-forgot" href="">
-                    Forgot password
-                  </a>
-                  <Button type="primary" htmlType="submit" className="login-form-button">
-                    Log in
-                  </Button>
-                  Or <a href="">register now!</a>
-                </Form.Item>
+                <Form {...formItemLayout} onSubmit={this.handleSubmit} className="login-form">
+                {this.getAllKey(data)}
+                <Collapse accordion>
+                    <Panel header="base" key="1">
+                        <Form.Item
+                        label={
+                            <span>
+                                version
+                            </span>
+                            }
+                        >
+                            {getFieldDecorator('version', {
+                            rules: [{ required: true, message: 'Please input version', whitespace: true }],
+                            })(<Input />)}
+                    </Form.Item>
+                    </Panel>
+                    <Panel header="params" key="2">
+                      <Collapse defaultActiveKey={['2']}>
+                          <Panel header="auto_levels" key="1">
+                            <Collapse defaultActiveKey={['2', '1']}>
+                            <Panel header="0" key="1">
+                              <Form.Item
+                              label={
+                                  <span>
+                                  eAutoLevelOperationType
+                                  </span>
+                                  }
+                              ><Input value="ALL_RGB_OPERATION"/>)}
+                           </Form.Item>
+                          <Form.Item
+                          label={
+                              <span>
+                              fHigCutL
+                              </span>
+                              }
+                          ><Input value="0.01"/>)}
+                      </Form.Item>
+                      <Form.Item
+                          label={
+                              <span>
+                              fHigCutR
+                              </span>
+                              }
+                          ><Input value="0.01"/>)}
+                      </Form.Item>
+                            </Panel>
+                          </Collapse>
+                          </Panel>
+                      </Collapse>
+                    </Panel>
+                </Collapse>
               </Form>
                 </Modal>
             </div>
