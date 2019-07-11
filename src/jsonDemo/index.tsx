@@ -66,8 +66,6 @@ getAllKey (obj: any): any[] {
         if (obj[items] instanceof Object) {
           return this.getAllKey(obj[items]);
         } else {
-          console.log('1 items', items);
-          console.log('the off values is', obj[items]);
           return (
             <Form.Item
                 label={
@@ -90,8 +88,6 @@ console.log('arr', arr)
       render() {
         const { Panel } = Collapse;
         const { getFieldDecorator } = this.props.form;
-        console.log('res data is:', data);
-        console.log('res data keys is:', Object.keys(data));
         const keys = Object.keys(data);
         const text = `
             A dog is a type of domesticated animal.
