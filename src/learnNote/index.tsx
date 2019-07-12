@@ -12,10 +12,11 @@ import {
     AutoComplete,
     Modal
   } from 'antd';
-import * as React from 'react';
-import { FormComponentProps } from 'antd/lib/form';
+  import * as React from 'react';
+  import { FormComponentProps } from 'antd/lib/form';
+  import { WrappedFormUtils } from 'antd/es/form/Form';
 import data from '../jsonDemo/data';
-import {createMainForm} from './mainForm';
+import { objectProperty } from '@babel/types';
   interface UserFormProps extends FormComponentProps {
     age: number;
     name: string;
@@ -41,11 +42,9 @@ import {createMainForm} from './mainForm';
       };
 handleOk = (e: any) => {
     console.log(e);
-    console.log('handke ok ');
     this.setState({
       visible: false,
     });
-    this.child.handleSubmit()
   };
 
 handleCancel = (e: any) => {
@@ -55,9 +54,6 @@ handleCancel = (e: any) => {
     });
   };
 
-bindRef = (ref: any) => {
-  this.child = ref;
-}
       render() {
         console.log('res data is:', data);
         console.log('res data keys is:', Object.keys(data));
@@ -71,7 +67,6 @@ bindRef = (ref: any) => {
             sm: { span: 16 },
           },
         };
-        const MainForm = createMainForm();
           return (
             <div>
                 <Button type="primary" onClick={this.showModal}>
@@ -83,14 +78,13 @@ bindRef = (ref: any) => {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 >
-                <MainForm triggerRef={this.bindRef}/>
                 </Modal>
             </div>
           );
       }
   }
   
-export function createJsonDemoMainForm(): React.ComponentClass<any> {
-  const form: any = RegistrationForm
-  return Form.create<any>()(form)
-}
+  export function createJsonDemoMainForm(): React.ComponentClass<any> {
+    const form: any = RegistrationForm
+    return Form.create<any>()(form)
+  }
