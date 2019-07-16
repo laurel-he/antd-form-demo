@@ -17,11 +17,9 @@ import {
   import { WrappedFormUtils } from 'antd/es/form/Form';
 import data from '../jsonDemo/data';
 import { objectProperty } from '@babel/types';
-  interface UserFormProps extends FormComponentProps {
-    age: number;
-    name: string;
-  }
- class HighPassForm extends React.Component<UserFormProps, any>{
+interface UserFormProps extends FormComponentProps {
+}
+ export class HighPassForm extends React.Component<UserFormProps, any>{
     constructor(props: UserFormProps) {
         super(props);
       }
@@ -170,9 +168,4 @@ handleCancel = (e: any) => {
             </div>
           );
       }
-  }
-  
-  export function highPassMainForm(): React.ComponentClass<any> {
-    const form: any = HighPassForm
-    return Form.create<any>()(form)
   }

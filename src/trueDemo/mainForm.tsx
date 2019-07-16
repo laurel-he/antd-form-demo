@@ -15,8 +15,8 @@ import {
 import * as React from 'react';
 import { FormComponentProps } from 'antd/lib/form';
 import data from '../jsonDemo/data';
-import {highPassMainForm} from './HighPass';
-import {mekeUpMainForm} from './Makeup'
+import {HighPassForm} from './HighPass';
+import {MakeUpForm} from './Makeup'
 interface UserFormProps extends FormComponentProps {
     data: object,
     triggerRef: any
@@ -24,14 +24,12 @@ interface UserFormProps extends FormComponentProps {
 class MainForm extends React.Component<UserFormProps, any>{
     getForm (list: any): any[] {
         const view = [];
-        const HighPassForm = highPassMainForm();
-        const MakeUpForm = mekeUpMainForm();
         for (let i = 0; i < list.length; i++) {
           if (list[i].enable === true) {
               switch(list[i]['type']) {
                 case 'HighPass':
                   view.push (
-                    <HighPassForm />
+                    <HighPassForm {...this.props}/>
                   );
                   break;
                 case 'Makeup':
@@ -56,7 +54,23 @@ class MainForm extends React.Component<UserFormProps, any>{
           }
         });
       };
+getAllValue= ()=>{    //3、自定义方法，用来传递数据（需要在父组件中调用获取数据）
+  const values= this.props.form.getFieldsValue();       //4、getFieldsValue：获取一组输入控件的值，如不传入参数，则获取全部组件的值
+  return values;
+}
     render() {
+      const tailFormItemLayout = {
+        wrapperCol: {
+          xs: {
+            span: 24,
+            offset: 0,
+          },
+          sm: {
+            span: 16,
+            offset: 8,
+          },
+        },
+      };
         console.log('res data is:', data);
         console.log('res data keys is:', Object.keys(data));
         const formItemLayout = {
@@ -73,6 +87,11 @@ class MainForm extends React.Component<UserFormProps, any>{
             <div>
                 <Form {...formItemLayout} onSubmit={this.handleSubmit} className="login-form">
                 {this.getForm(data.params.list)}
+                <Form.Item {...tailFormItemLayout}>
+              <Button type="primary" htmlType="submit">
+                Register
+              </Button>
+            </Form.Item>
               </Form>
             </div>
           );

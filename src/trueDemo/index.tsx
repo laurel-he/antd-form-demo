@@ -45,7 +45,6 @@ handleOk = (e: any) => {
     this.setState({
       visible: false,
     });
-    this.child.handleSubmit()
   };
 
 handleCancel = (e: any) => {
@@ -56,7 +55,6 @@ handleCancel = (e: any) => {
   };
 
 bindRef = (ref: any) => {
-  this.child = ref;
 }
       render() {
         console.log('res data is:', data);
@@ -83,7 +81,7 @@ bindRef = (ref: any) => {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 >
-                <MainForm triggerRef={this.bindRef}/>
+                <MainForm  />
                 </Modal>
             </div>
           );

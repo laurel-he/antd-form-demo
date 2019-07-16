@@ -3,7 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 import 'antd/dist/antd.css';
 import {createMainForm} from './jsonDemo/index';
-import {mekeUpMainForm} from './trueDemo/Makeup'
 import {createJsonDemoMainForm} from './trueDemo/index';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 interface UserFormProps{
@@ -14,7 +13,6 @@ export default class App extends React.Component<UserFormProps, any>{
     }
     render() {
       const EditForm = createMainForm();
-      const MakeUpForm = mekeUpMainForm();
       const JsonDemoForm = createJsonDemoMainForm();
       return (
         <div>

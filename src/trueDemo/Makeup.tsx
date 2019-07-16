@@ -16,36 +16,33 @@ import {
   import { FormComponentProps } from 'antd/lib/form';
   import { WrappedFormUtils } from 'antd/es/form/Form';
 import data from '../jsonDemo/data';
-import { objectProperty } from '@babel/types';
-  interface UserFormProps extends FormComponentProps {
-    age: number;
-    name: string;
-  }
- class MakeUpForm extends React.Component<UserFormProps, any>{
+interface UserFormProps extends FormComponentProps {
+}
+export class MakeUpForm extends React.Component<UserFormProps, any>{
     constructor(props: UserFormProps) {
         super(props);
       }
     
-      handleSubmit() {
-        this.props.form.validateFields((err, values) => {
-          if (!err) {
-            console.log('Received values of form: ', values);
-          }
-        });
-      };
+handleSubmit() {
+this.props.form.validateFields((err, values) => {
+    if (!err) {
+    console.log('Received values of form: ', values);
+    }
+});
+};
 handleOk = (e: any) => {
     console.log(e);
     this.setState({
-      visible: false,
+        visible: false,
     });
-  };
+};
 
 handleCancel = (e: any) => {
     console.log(e);
     this.setState({
       visible: false,
     });
-  };
+};
 conditionalJudgment(header: string, shoulian: any, xiaolian: any, vlian:any) {
     const { Panel } = Collapse;
     return (
@@ -290,9 +287,4 @@ conditionalJudgment(header: string, shoulian: any, xiaolian: any, vlian:any) {
             </div>
           );
       }
-  }
-  
-  export function mekeUpMainForm(): React.ComponentClass<any> {
-    const form: any = MakeUpForm
-    return Form.create<any>()(form)
   }
