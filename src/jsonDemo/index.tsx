@@ -1,7 +1,7 @@
 import {
     Form,
     Input,
-    Layout,
+    Tooltip,
     Icon,
     Collapse,
     Select,
@@ -64,77 +64,50 @@ handleRender(tree: string, resData: any, moduleName: string, i: number) {
   // const type = resData.moduleName.tree;
   if (resData) {
     const { getFieldDecorator } = this.props.form;
-    const resRender = resData[tree];
-    let k = 0;
+    const resRender = resData[tree]
+    let k = 0
     if (resData[tree]) {
-      const renderData = resData[tree];
-      console.log('renderData---------', renderData);
-      console.log('renderData--type-------', renderData['type']);
-      switch(renderData['type']) {
-        case "switch":
-          return (<Form.Item
-            label={
-                <span>
-                {renderData['chinese']}
-                </span>
-                }
-              key={i}
-            >{getFieldDecorator(tree, {})(
-            <Switch
-              checkedChildren={<Icon type="check" />}
-              unCheckedChildren={<Icon type="close" />}
-              defaultChecked={renderData.enable}
-              disabled={renderData['readyOnly']}
-              />)}
-              </Form.Item>);
-          break;
-        case "radioNumber":
-          return (<Form.Item
-            label={
-                <span>
-                {renderData['chinese']}
-                </span>
-                }
-             key={i}
-            >
-            {getFieldDecorator('baiYa', {})(<Radio.Group >
-            {mapping['ly'].mapV.map((items) => {
-              k++;
-                return (
-                    <Radio.Button key={k} value={items.map}>{items.oriValue}</Radio.Button>
-                );
-            })}
-            </Radio.Group>)}</Form.Item>);
-        break;
-        case "input":
+      const renderData = resData[tree]
+      let parentId = document.getElementById(renderData['parentId'].toString())
+      if (parentId) {
+        switch(renderData['type']) {
+          case "switch":
+          parentId.append("<h2>testTesttest<h2>");
             return (<Form.Item
               label={
                   <span>
                   {renderData['chinese']}
                   </span>
                   }
-              key={i}
+                key={i}
+              >{getFieldDecorator(tree, {})(
+              <Switch
+                checkedChildren={<Icon type="check" />}
+                unCheckedChildren={<Icon type="close" />}
+                defaultChecked={renderData.enable}
+                disabled={renderData['readyOnly']}
+                />)}
+                </Form.Item>);
+            break;
+          case "radioNumber":
+            return (<Form.Item
+              label={
+                  <span>
+                  {renderData['chinese']}
+                  </span>
+                  }
+               key={i}
               >
-              {getFieldDecorator('baiYa', {})(
-              <Input />)}</Form.Item>);
-        break;
-        case "radioOne":
-              return (<Form.Item
-                label={
-                    <span>
-                    {renderData['chinese']}
-                    </span>
-                    }
-                 key={i}
-                >
-                {getFieldDecorator('radReverse', {})(
-                <Radio.Group >
-                  <Radio value={0}>是</Radio>
-                  <Radio value={1}>否</Radio>
-              </Radio.Group>)}
-            </Form.Item>);
-        break;
-        case "Collapse":
+              {getFieldDecorator('baiYa', {})(<Radio.Group >
+              {mapping['ly'].mapV.map((items) => {
+                k++;
+                  return (
+                      <Radio.Button key={k} value={items.map}>{items.oriValue}</Radio.Button>
+                  );
+              })}
+              </Radio.Group>)}</Form.Item>);
+          break;
+          case "input":
               return (<Form.Item
                 label={
                     <span>
@@ -143,17 +116,46 @@ handleRender(tree: string, resData: any, moduleName: string, i: number) {
                     }
                 key={i}
                 >
-                {getFieldDecorator('radReverse', {})(
-                <Radio.Group >
-                  <Radio value={0}>是</Radio>
-                  <Radio value={1}>否</Radio>
-              </Radio.Group>)}
-            </Form.Item>);
-        break;
-        default:
-            console.error('lack of type:' + resRender['type'] + ', please check the type!!!');
-        break;
-    }
+                {getFieldDecorator('baiYa', {})(
+                <Input />)}</Form.Item>);
+          break;
+          case "radioOne":
+                return (<Form.Item
+                  label={
+                      <span>
+                      {renderData['chinese']}
+                      </span>
+                      }
+                   key={i}
+                  >
+                  {getFieldDecorator('radReverse', {})(
+                  <Radio.Group >
+                    <Radio value={0}>是</Radio>
+                    <Radio value={1}>否</Radio>
+                </Radio.Group>)}
+              </Form.Item>);
+          break;
+          case "Collapse":
+                return (<Form.Item
+                  label={
+                      <span>
+                      {renderData['chinese']}
+                      </span>
+                      }
+                  key={i}
+                  >
+                  {getFieldDecorator('radReverse', {})(
+                  <Radio.Group >
+                    <Radio value={0}>是</Radio>
+                    <Radio value={1}>否</Radio>
+                </Radio.Group>)}
+              </Form.Item>);
+          break;
+          default:
+              console.error('lack of type:' + resRender['type'] + ', please check the type!!!');
+          break;
+      }
+      }
     }
   }
 }
@@ -202,19 +204,19 @@ console.log('arr', arr)
 /** 数据加载之前展示所有层级 */
 pannelList(treeTrees: any, resPanel: any[]) :any[]{
   const { Panel } = Collapse;
-  console.log('treeTrees', treeTrees)
   let i = 0;
   let k = 0;
   Object.keys(treeTrees).map((treeItem) => {
     i++;
-    console.log('treeTrees[treeItem][chinese]', treeTrees[treeItem]['chinese']);
     if (treeTrees[treeItem]['show'] == true) {
       resPanel.push(<Panel header={treeTrees[treeItem]['chinese']} key={i.toString()}></Panel>)
       if (treeTrees[treeItem]['child']) {
         k++;
         let childPanel = resPanel;
         resPanel.push(<Collapse key={k.toString()}>
-        <Panel header={treeTrees[treeItem]['chinese']} key={i.toString()}></Panel>
+        <Panel header={treeTrees[treeItem]['chinese']} key={i.toString()}>
+        {this.handleRender}
+        </Panel>
         </Collapse>)
         return this.pannelList(treeTrees[treeItem]['child'], resPanel);
       }
@@ -222,9 +224,35 @@ pannelList(treeTrees: any, resPanel: any[]) :any[]{
   })
   return resPanel
 }
+
+/**
+     * 递归生成菜单
+     * @param menuObj
+     * @returns {Array}
+     */
+    generateMenu(menuObj: any) {
+      let vdom = [];
+      const { Panel } = Collapse;
+      if (menuObj instanceof Array) {
+          let list = [];
+          for (var item of menuObj) {
+              list.push(this.generateMenu(item));
+          }
+          vdom.push(
+              <Collapse key="single">
+                  {list}
+              </Collapse>
+          );
+      } else {
+          vdom.push(
+              <Panel header={menuObj.chinese} key={menuObj.treeId} id={(menuObj.treeId).toString()}>
+                  {this.generateMenu(menuObj.child)}
+              </Panel>
+          );
+      }
+      return vdom;
+  }
       render() {
-        console.log('treeRule:', treeRule);
-        const { getFieldDecorator } = this.props.form;
         const treeModules: any = treeRule.modules;
         const treeTrees: any = treeRule.tree;
         const { Panel } = Collapse;
@@ -256,9 +284,9 @@ pannelList(treeTrees: any, resPanel: any[]) :any[]{
                 onCancel={this.handleCancel}
                 >
                 <Form {...formItemLayout} onSubmit={this.handleSubmit} className="login-form">
-                <Collapse defaultActiveKey={['1']}>
-                {this.pannelList(treeTrees, [])}
-                </Collapse>
+                <div>
+                  {this.generateMenu(treeTrees)}
+                </div>
                 {Object.keys(treeModules).map((tree) => {
                   return this.getAllKey(data, 'data', tree)
                 })}
